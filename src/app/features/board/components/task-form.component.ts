@@ -27,9 +27,9 @@ import {
       ></div>
 
       <!-- Modal -->
-      <div class="fixed inset-x-4 top-[8%] md:inset-x-auto md:left-1/2 md:-translate-x-1/2 md:w-full md:max-w-md bg-white rounded-xl shadow-2xl z-50 overflow-hidden">
+      <div class="fixed inset-x-4 top-[5%] md:inset-x-auto md:left-1/2 md:-translate-x-1/2 md:w-full md:max-w-lg bg-white rounded-xl shadow-2xl z-50 overflow-hidden max-h-[90vh] overflow-y-auto">
         <!-- Header -->
-        <div class="px-5 py-4 border-b border-gray-100 flex items-center justify-between">
+        <div class="px-5 py-4 border-b border-gray-100 flex items-center justify-between sticky top-0 bg-white">
           <h2 class="text-base font-semibold text-gray-900">Neue Aufgabe</h2>
           <button
             (click)="close()"
@@ -45,15 +45,18 @@ import {
         <form (ngSubmit)="submit()" class="p-5">
           <!-- Title -->
           <div class="mb-4">
+            <label class="block text-xs font-medium text-gray-500 mb-1">Aufgabe *</label>
             <input
               type="text"
               [(ngModel)]="formData.title"
               name="title"
-              class="w-full px-3 py-2.5 text-[15px] rounded-lg border border-gray-200 focus:border-gray-400 focus:ring-0 outline-none placeholder-gray-400"
+              class="w-full px-3 py-2.5 text-sm rounded-lg border border-gray-200 focus:border-gray-400 focus:ring-0 outline-none placeholder-gray-400"
+              [class.border-red-300]="showError && !formData.title.trim()"
               placeholder="Was muss erledigt werden?"
-              required
-              autofocus
             />
+            @if (showError && !formData.title.trim()) {
+              <p class="text-xs text-red-500 mt-1">Bitte Aufgabe eingeben</p>
+            }
           </div>
 
           <!-- Grid: Category, Priority, Owner, Source -->
@@ -71,7 +74,7 @@ import {
               </select>
             </div>
             <div>
-              <label class="block text-xs font-medium text-gray-500 mb-1">Priorität</label>
+              <label class="block text-xs font-medium text-gray-500 mb-1">Prioritaet</label>
               <select
                 [(ngModel)]="formData.priority"
                 name="priority"
@@ -83,7 +86,7 @@ import {
               </select>
             </div>
             <div>
-              <label class="block text-xs font-medium text-gray-500 mb-1">Zuständig</label>
+              <label class="block text-xs font-medium text-gray-500 mb-1">Zustaendig</label>
               <select
                 [(ngModel)]="formData.owner"
                 name="owner"
@@ -108,27 +111,27 @@ import {
             </div>
           </div>
 
-          <!-- Due Date & Note in one row -->
-          <div class="grid grid-cols-2 gap-3 mb-5">
-            <div>
-              <label class="block text-xs font-medium text-gray-500 mb-1">Fällig bis</label>
-              <input
-                type="date"
-                [(ngModel)]="formData.dueDate"
-                name="dueDate"
-                class="w-full px-3 py-2 text-sm rounded-lg border border-gray-200 focus:border-gray-400 focus:ring-0 outline-none"
-              />
-            </div>
-            <div>
-              <label class="block text-xs font-medium text-gray-500 mb-1">Notiz</label>
-              <input
-                type="text"
-                [(ngModel)]="formData.note"
-                name="note"
-                class="w-full px-3 py-2 text-sm rounded-lg border border-gray-200 focus:border-gray-400 focus:ring-0 outline-none placeholder-gray-400"
-                placeholder="Optional..."
-              />
-            </div>
+          <!-- Due Date -->
+          <div class="mb-4">
+            <label class="block text-xs font-medium text-gray-500 mb-1">Faellig bis (optional)</label>
+            <input
+              type="date"
+              [(ngModel)]="formData.dueDate"
+              name="dueDate"
+              class="w-full px-3 py-2 text-sm rounded-lg border border-gray-200 focus:border-gray-400 focus:ring-0 outline-none"
+            />
+          </div>
+
+          <!-- Note - full width textarea -->
+          <div class="mb-5">
+            <label class="block text-xs font-medium text-gray-500 mb-1">Notiz (optional)</label>
+            <textarea
+              [(ngModel)]="formData.note"
+              name="note"
+              rows="3"
+              class="w-full px-3 py-2 text-sm rounded-lg border border-gray-200 focus:border-gray-400 focus:ring-0 outline-none placeholder-gray-400 resize-none"
+              placeholder="Zusaetzliche Infos, Kontext, Details..."
+            ></textarea>
           </div>
 
           <!-- Actions -->
@@ -157,6 +160,7 @@ export class TaskFormComponent {
   @Output() onClose = new EventEmitter<void>();
 
   isOpen = signal(false);
+  showError = false;
 
   formData: TaskFormData = this.getDefaultFormData();
 
@@ -195,22 +199,28 @@ export class TaskFormComponent {
 
   open(): void {
     this.formData = this.getDefaultFormData();
+    this.showError = false;
     this.isOpen.set(true);
   }
 
   close(): void {
     this.isOpen.set(false);
+    this.showError = false;
     this.onClose.emit();
   }
 
   submit(): void {
-    if (!this.formData.title.trim()) return;
+    // Validate
+    if (!this.formData.title.trim()) {
+      this.showError = true;
+      return;
+    }
 
     this.onSubmit.emit({
       ...this.formData,
       title: this.formData.title.trim(),
-      note: this.formData.note?.trim() || undefined,
-      dueDate: this.formData.dueDate || undefined
+      note: this.formData.note?.trim() || '',
+      dueDate: this.formData.dueDate || ''
     });
 
     this.close();
