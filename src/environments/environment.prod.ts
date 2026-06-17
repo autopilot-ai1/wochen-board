@@ -1,12 +1,12 @@
 export const environment = {
   production: true,
   firebase: {
-    apiKey: "AIzaSyDummyKeyForProd",
+    apiKey: "AIzaSyBF2aewBfb4gQzC7uufy5APcT_G3G9o4K4",
     authDomain: "landerer-pv-rechner.firebaseapp.com",
     projectId: "landerer-pv-rechner",
-    storageBucket: "landerer-pv-rechner.appspot.com",
-    messagingSenderId: "000000000000",
-    appId: "1:000000000000:web:0000000000000000000000"
+    storageBucket: "landerer-pv-rechner.firebasestorage.app",
+    messagingSenderId: "606399991550",
+    appId: "1:606399991550:web:3310607e69046f681d1faf"
   },
   appPassword: "landererElektro1!"
 };
