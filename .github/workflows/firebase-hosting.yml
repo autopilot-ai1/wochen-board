@@ -31,3 +31,4 @@ jobs:
           firebaseServiceAccount: ${{ secrets.FIREBASE_SERVICE_ACCOUNT_LANDERER_PV_RECHNER }}
           channelId: live
           projectId: landerer-pv-rechner
+          target: wochen-board

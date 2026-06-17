@@ -1,5 +1,6 @@
 {
   "hosting": {
+    "site": "wochen-board",
     "public": "dist/wochen-board-app/browser",
     "ignore": [
       "firebase.json",
