@@ -22,44 +22,48 @@ import {
     @if (isOpen()) {
       <!-- Backdrop -->
       <div
-        class="fixed inset-0 bg-black/20 backdrop-blur-sm z-40"
+        class="fixed inset-0 bg-black/30 z-40 transition-opacity"
         (click)="close()"
       ></div>
 
       <!-- Modal -->
-      <div class="fixed inset-x-4 top-[10%] md:inset-x-auto md:left-1/2 md:-translate-x-1/2 md:w-full md:max-w-lg bg-white rounded-2xl shadow-modal z-50 overflow-hidden">
+      <div class="fixed inset-x-4 top-[8%] md:inset-x-auto md:left-1/2 md:-translate-x-1/2 md:w-full md:max-w-md bg-white rounded-xl shadow-2xl z-50 overflow-hidden">
         <!-- Header -->
-        <div class="px-6 py-4 border-b border-gray-100">
-          <h2 class="text-lg font-semibold text-gray-900">Neue Aufgabe</h2>
+        <div class="px-5 py-4 border-b border-gray-100 flex items-center justify-between">
+          <h2 class="text-base font-semibold text-gray-900">Neue Aufgabe</h2>
+          <button
+            (click)="close()"
+            class="p-1 text-gray-400 hover:text-gray-600 rounded"
+          >
+            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M6 18L18 6M6 6l12 12"/>
+            </svg>
+          </button>
         </div>
 
         <!-- Form -->
-        <form (ngSubmit)="submit()" class="p-6 space-y-5">
+        <form (ngSubmit)="submit()" class="p-5">
           <!-- Title -->
-          <div>
-            <label class="block text-sm font-medium text-gray-700 mb-1.5">
-              Aufgabe
-            </label>
+          <div class="mb-4">
             <input
               type="text"
               [(ngModel)]="formData.title"
               name="title"
-              class="w-full px-4 py-2.5 rounded-xl border border-gray-200 focus:border-landerer-500 focus:ring-2 focus:ring-landerer-100 outline-none transition-all"
+              class="w-full px-3 py-2.5 text-[15px] rounded-lg border border-gray-200 focus:border-gray-400 focus:ring-0 outline-none placeholder-gray-400"
               placeholder="Was muss erledigt werden?"
               required
+              autofocus
             />
           </div>
 
-          <!-- Category & Priority -->
-          <div class="grid grid-cols-2 gap-4">
+          <!-- Grid: Category, Priority, Owner, Source -->
+          <div class="grid grid-cols-2 gap-3 mb-4">
             <div>
-              <label class="block text-sm font-medium text-gray-700 mb-1.5">
-                Kategorie
-              </label>
+              <label class="block text-xs font-medium text-gray-500 mb-1">Kategorie</label>
               <select
                 [(ngModel)]="formData.category"
                 name="category"
-                class="w-full px-4 py-2.5 rounded-xl border border-gray-200 focus:border-landerer-500 focus:ring-2 focus:ring-landerer-100 outline-none transition-all bg-white"
+                class="w-full px-3 py-2 text-sm rounded-lg border border-gray-200 focus:border-gray-400 focus:ring-0 outline-none bg-white"
               >
                 @for (cat of categories; track cat.value) {
                   <option [value]="cat.value">{{ cat.label }}</option>
@@ -67,31 +71,23 @@ import {
               </select>
             </div>
             <div>
-              <label class="block text-sm font-medium text-gray-700 mb-1.5">
-                Priorität
-              </label>
+              <label class="block text-xs font-medium text-gray-500 mb-1">Priorität</label>
               <select
                 [(ngModel)]="formData.priority"
                 name="priority"
-                class="w-full px-4 py-2.5 rounded-xl border border-gray-200 focus:border-landerer-500 focus:ring-2 focus:ring-landerer-100 outline-none transition-all bg-white"
+                class="w-full px-3 py-2 text-sm rounded-lg border border-gray-200 focus:border-gray-400 focus:ring-0 outline-none bg-white"
               >
                 @for (prio of priorities; track prio.value) {
                   <option [value]="prio.value">{{ prio.label }}</option>
                 }
               </select>
             </div>
-          </div>
-
-          <!-- Owner & Source -->
-          <div class="grid grid-cols-2 gap-4">
             <div>
-              <label class="block text-sm font-medium text-gray-700 mb-1.5">
-                Zuständig
-              </label>
+              <label class="block text-xs font-medium text-gray-500 mb-1">Zuständig</label>
               <select
                 [(ngModel)]="formData.owner"
                 name="owner"
-                class="w-full px-4 py-2.5 rounded-xl border border-gray-200 focus:border-landerer-500 focus:ring-2 focus:ring-landerer-100 outline-none transition-all bg-white"
+                class="w-full px-3 py-2 text-sm rounded-lg border border-gray-200 focus:border-gray-400 focus:ring-0 outline-none bg-white"
               >
                 @for (owner of owners; track owner.value) {
                   <option [value]="owner.value">{{ owner.label }}</option>
@@ -99,13 +95,11 @@ import {
               </select>
             </div>
             <div>
-              <label class="block text-sm font-medium text-gray-700 mb-1.5">
-                Quelle
-              </label>
+              <label class="block text-xs font-medium text-gray-500 mb-1">Quelle</label>
               <select
                 [(ngModel)]="formData.source"
                 name="source"
-                class="w-full px-4 py-2.5 rounded-xl border border-gray-200 focus:border-landerer-500 focus:ring-2 focus:ring-landerer-100 outline-none transition-all bg-white"
+                class="w-full px-3 py-2 text-sm rounded-lg border border-gray-200 focus:border-gray-400 focus:ring-0 outline-none bg-white"
               >
                 @for (src of sources; track src.value) {
                   <option [value]="src.value">{{ src.label }}</option>
@@ -114,45 +108,41 @@ import {
             </div>
           </div>
 
-          <!-- Due Date -->
-          <div>
-            <label class="block text-sm font-medium text-gray-700 mb-1.5">
-              Fällig bis (optional)
-            </label>
-            <input
-              type="date"
-              [(ngModel)]="formData.dueDate"
-              name="dueDate"
-              class="w-full px-4 py-2.5 rounded-xl border border-gray-200 focus:border-landerer-500 focus:ring-2 focus:ring-landerer-100 outline-none transition-all"
-            />
-          </div>
-
-          <!-- Note -->
-          <div>
-            <label class="block text-sm font-medium text-gray-700 mb-1.5">
-              Notiz (optional)
-            </label>
-            <textarea
-              [(ngModel)]="formData.note"
-              name="note"
-              rows="2"
-              class="w-full px-4 py-2.5 rounded-xl border border-gray-200 focus:border-landerer-500 focus:ring-2 focus:ring-landerer-100 outline-none transition-all resize-none"
-              placeholder="Zusätzliche Infos..."
-            ></textarea>
+          <!-- Due Date & Note in one row -->
+          <div class="grid grid-cols-2 gap-3 mb-5">
+            <div>
+              <label class="block text-xs font-medium text-gray-500 mb-1">Fällig bis</label>
+              <input
+                type="date"
+                [(ngModel)]="formData.dueDate"
+                name="dueDate"
+                class="w-full px-3 py-2 text-sm rounded-lg border border-gray-200 focus:border-gray-400 focus:ring-0 outline-none"
+              />
+            </div>
+            <div>
+              <label class="block text-xs font-medium text-gray-500 mb-1">Notiz</label>
+              <input
+                type="text"
+                [(ngModel)]="formData.note"
+                name="note"
+                class="w-full px-3 py-2 text-sm rounded-lg border border-gray-200 focus:border-gray-400 focus:ring-0 outline-none placeholder-gray-400"
+                placeholder="Optional..."
+              />
+            </div>
           </div>
 
           <!-- Actions -->
-          <div class="flex gap-3 pt-2">
+          <div class="flex gap-2">
             <button
               type="submit"
-              class="flex-1 py-2.5 px-4 bg-gray-900 hover:bg-gray-800 text-white font-medium rounded-xl transition-colors"
+              class="flex-1 py-2.5 px-4 bg-gray-900 hover:bg-gray-800 text-white text-sm font-medium rounded-lg transition-colors"
             >
-              Hinzufügen
+              Erstellen
             </button>
             <button
               type="button"
               (click)="close()"
-              class="py-2.5 px-6 text-gray-600 hover:text-gray-900 font-medium transition-colors"
+              class="py-2.5 px-4 text-sm text-gray-500 hover:text-gray-700 font-medium transition-colors"
             >
               Abbrechen
             </button>

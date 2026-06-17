@@ -9,52 +9,47 @@ import { AuthService } from '../../core/services/auth.service';
   standalone: true,
   imports: [CommonModule, FormsModule],
   template: `
-    <div class="min-h-screen flex items-center justify-center bg-gray-50 px-4">
-      <div class="w-full max-w-sm">
+    <div class="min-h-screen flex items-center justify-center bg-[#FAFAFA] px-4">
+      <div class="w-full max-w-xs">
         <!-- Logo / Brand -->
-        <div class="text-center mb-10">
-          <div class="inline-flex items-center justify-center w-16 h-16 rounded-2xl bg-landerer-500 mb-4">
-            <svg class="w-8 h-8 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+        <div class="text-center mb-8">
+          <div class="inline-flex items-center justify-center w-12 h-12 rounded-xl bg-gradient-to-br from-amber-500 to-amber-600 mb-4 shadow-sm">
+            <svg class="w-6 h-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
               <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z"/>
             </svg>
           </div>
-          <h1 class="text-2xl font-semibold text-gray-900">Wochen-Board</h1>
-          <p class="text-sm text-gray-500 mt-1">Landerer Energie</p>
+          <h1 class="text-xl font-semibold text-gray-900 tracking-tight">Wochen-Board</h1>
+          <p class="text-sm text-gray-400 mt-1">Landerer Energie</p>
         </div>
 
         <!-- Login Card -->
-        <div class="bg-white rounded-2xl shadow-card p-8">
-          <form (ngSubmit)="onSubmit()" class="space-y-6">
-            <div>
-              <label for="password" class="block text-sm font-medium text-gray-700 mb-2">
-                Passwort
-              </label>
+        <div class="bg-white rounded-xl border border-gray-200 p-6">
+          <form (ngSubmit)="onSubmit()">
+            <div class="mb-4">
               <input
-                id="password"
                 type="password"
                 [(ngModel)]="password"
                 name="password"
                 autocomplete="current-password"
-                class="w-full px-4 py-3 rounded-xl border border-gray-200 focus:border-landerer-500 focus:ring-2 focus:ring-landerer-100 outline-none transition-all text-gray-900 placeholder-gray-400"
-                placeholder="Passwort eingeben"
+                class="w-full px-4 py-3 text-[15px] rounded-lg border border-gray-200 focus:border-gray-400 focus:ring-0 outline-none transition-all text-gray-900 placeholder-gray-400"
+                placeholder="Passwort"
                 [class.border-red-300]="error()"
-                [class.focus:border-red-500]="error()"
               />
               @if (error()) {
-                <p class="mt-2 text-sm text-red-600">{{ error() }}</p>
+                <p class="mt-2 text-sm text-red-500">{{ error() }}</p>
               }
             </div>
 
             <button
               type="submit"
-              class="w-full py-3 px-4 bg-landerer-500 hover:bg-landerer-600 text-white font-medium rounded-xl transition-colors focus:outline-none focus:ring-2 focus:ring-landerer-500 focus:ring-offset-2"
+              class="w-full py-3 px-4 bg-gray-900 hover:bg-gray-800 text-white text-sm font-medium rounded-lg transition-colors"
             >
               Anmelden
             </button>
           </form>
         </div>
 
-        <p class="text-center text-xs text-gray-400 mt-8">
+        <p class="text-center text-xs text-gray-400 mt-6">
           © {{ currentYear }} Landerer Energie GmbH
         </p>
       </div>
